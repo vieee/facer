@@ -1,7 +1,9 @@
 import React, { useRef } from "react";
 import "./App.css";
+// eslint-disable-next-line
 import * as tf from "@tensorflow/tfjs";
 import * as facemesh from "@tensorflow-models/facemesh";
+import * as blazeface from "@tensorflow-models/blazeface";
 import Webcam from "react-webcam";
 import { drawMesh } from "./meshUtilities.js";
 
@@ -41,6 +43,12 @@ function App() {
       // Make Detections
       const faceEstimate = await network.estimateFaces(video);
       console.log(faceEstimate);
+
+      // Draw Face Boundary
+      const model = await blazeface.load();
+      const returnTensors = false; // Pass in `true` to get tensors back, rather than values.
+      const predictions = await model.estimateFaces(video, returnTensors);
+      console.log(predictions[0])
 
       //Get canvas context
       const ctx = canvasReference.current.getContext("2d");
